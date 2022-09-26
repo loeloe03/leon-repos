@@ -1,10 +1,8 @@
-grondgetallen = [1,2,3,-4,5,-2,7,8,9,-3]
-
-
 def kwadraten_som(grondgetallen):
-    for pos in grondgetallen:
-        if pos > 0:
-            return grondgetallen
+  som = 0
+  for getal in grondgetallen:
+    if getal > 0:
+      som += getal **2
+  return som
+print(kwadraten_som([4, 3, -5]))
 
-uitkomst = (kwadraten_som(grondgetallen)) **2
-print(uitkomst)--
