@@ -1,7 +1,11 @@
-letterlijst = ['a','b,','c',]
 
-def wijzig(letterlijst):
-    for vervangen in range(letterlijst):
 
-        if letterlijst[0] != 'd':
-            [0] = 'a'
+
+
+getallen = [-30, -20, -10, 0, 10, 20, 30, 40]
+
+def tabel(tempie):
+    for temp in tempie:
+        return temp
+
+print(tabel(getallen))
