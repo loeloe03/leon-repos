@@ -1,5 +1,9 @@
-outfile = open('pe_6_2_kaartnummers.txt', 'w')
-outfile.write('To\n')
+import datetime
 
-outfile.close
+nu = datetime.datetime.today()
+s = nu.strftime("%a %d %b %Y, %H:%M:%S")
+naam = input('Wat is je naam? ')
 
+outfile = open('pe_6_4_hardlopers.txt', 'a')
+outfile.write('{}, {}\n'.format(s, naam))
+outfile.close()
