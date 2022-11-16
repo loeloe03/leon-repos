@@ -59,21 +59,17 @@ def div(n):
 
 
 def is_prime(n):
-    """
-    Bepaal of gegeven getal een priemgetal is.
 
-    Hint: maak gebruik van de functie `div()`.
-    Optioneel: bedenk een efficiënter alternatief.
+    if n <= 1 :
+        return False
 
-    Args:
-        n (int): Een geheel getal.
-
-    Returns:
-        bool: True als het getal een priemgetal is, anders False.
-    """
-    return
-
-
+    for i in range(2,n):
+        if (n%i) == 0:
+            return False
+        
+    return True
+    
+   
 def primes(num):
     """
     Bepaal alle priemgetallen kleiner dan een bepaald geheel getal.
