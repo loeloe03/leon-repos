@@ -29,6 +29,7 @@ klas = "V1P"
 studentnummer = "1838291"
 
 
+
 def is_even(n):
     
     if n % 2 == 0:
@@ -36,6 +37,7 @@ def is_even(n):
     
     else:
         return False
+
 
 
 def floor(real):
