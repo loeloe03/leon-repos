@@ -4,5 +4,6 @@ def kwadraten_som(grondgetallen):
     if getal > 0:
       som += getal **2
   return som
-print(kwadraten_som([4, 3, -5]))
+print(kwadraten_som([4, 3, -5])) 
 
+ 
