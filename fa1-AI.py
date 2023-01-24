@@ -31,6 +31,7 @@ studentnummer = "1838291"
 
 
 def is_even(n):
+    print(n)
     
     if n % 2 == 0:
         return True
