@@ -62,49 +62,45 @@ def median(lst):
         return float((lst[getal_1] + lst[getal_2]) / 2)
 
 def q1(lst):
-    # Het eerste kwartiel is de mediaan van de getallen die kleiner zijn dan de mediaan
-    
-    # Hier kijken we wat de eerste kwartiel is
-    
-    # Dat doen we door de mediaan te pakken en dan alle getallen die kleiner zijn dan de mediaan te pakken
+    #Het eerste kwartiel is de 1 kwart van een boxplot. De derde kwart zit boven de mediaan.
+    # Eerst controleren we de mediaan door de gemaakte functie mediaan aan te roepen.    
+    #Vervolgens controleren we of de getallen kleiner zijn dan de mediaan. 
     mediaan = median(lst)
 
     # We maken een nieuwe lijst aan met alle getallen die kleiner zijn dan de mediaan
-    new_list = []
+   
     
     if len(lst) % 2 == 0:
-        numbers = int(len(lst) / 2)
-        return median(lst[:numbers])
+        nummers = int(len(lst) / 2)
+        return median(lst[:nummers])
     else:
-        numbers = len(lst) // 2
-        return median(lst[:numbers])
+        nummers = len(lst) // 2
+        return median(lst[:nummers])
+
+
 
 
 def q3(lst):
-    # Het derde kwartiel is hetzelfde als het eerste kwartiel alleen dan met de getallen die groter zijn dan de mediaan
-    
-    # Hier kijken we wat de derde kwartiel is
-    
-    # Dat doen we door de mediaan te pakken en dan alle getallen die groter zijn dan de mediaan te pakken
+    #Het derde kwartiel is de derde kwart van een boxplot. De derde helft zit boven de mediaan.
+    # Eerst controleren we de mediaan door de gemaakte functie mediaan aan te roepen.    
+    #Vervolgens controleren we of de getallen groter zijn dan de mediaan. 
     mediaan = median(lst)
     
-    # We maken een nieuwe lijst aan met alle getallen die groter zijn dan de mediaan
-    new_list = [nummer for nummer in lst if nummer > mediaan]
-    return median(new_list)
+    # We maken een nieuwe lijst als de getallen groter zijn dan de mediaan.
+    nieuwe_lijst = [nummer for nummer in lst if nummer > mediaan]
+    return median(nieuwe_lijst)
 
 def var(lst):
-    # Een variantie is de afwijking van de getallen bij elkaar opgeteld
-    # Een afwijking is het getal min het gemiddelde
-    
-    # Hier kijken we wat de variantie is
-    # Dat doen we door de afwijkingen van de getallen bij elkaar op te tellen en te delen door het aantal getallen
+    #De variantie is alle getallen bij elkaar opgeteld. 
+    # De afwijking berekenen we door het getal af te trekken van het gemiddelde.
+    # We berkenen de variantie door de getallen bij elkaar op te tellen en te delen door het aantal getallen.
     # De afwijkingen zijn de getallen die je van het gemiddelde afhaalt
     # De variantie is de afwijkingen bij elkaar opgeteld
 
-    # We pakken de lengte van de lijst
+    # Lengte van de lijst definiëren.
     lengte = len(lst)
 
-    # We pakken het gemiddelde
+    # Het gemiddelde van de lijst definiëren.
     gemiddelde = mean(lst)
 
     # We maken een lege lijst aan
