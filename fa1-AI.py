@@ -71,18 +71,11 @@ def is_prime(n):
     
    
 def primes(num):
-    """
-    Bepaal alle priemgetallen kleiner dan een bepaald geheel getal.
-
-    Hint: Maak gebruik van de functie `is_prime()`.
-
-    Args:
-        num (int): Een geheel getal.
-
-    Returns:
-        list: Een gesorteerde lijst met alle priemgetallen kleiner dan `num`.
-    """
     primelist = []
+    for i in range(0, num):
+        if is_prime(i):
+            primelist.append(i)
+
     return sorted(primelist)
 
 
