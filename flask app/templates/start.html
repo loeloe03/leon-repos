@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Start Spel</title>
+</head>
+<body>
+    <h1>De speler die mag schieten is: {{ aan_de_beurt }} {{aan_de_beurt1}}
+    </h1>
+
+    <h3>Resterende punten van {{naam_keeper1}} {{naam_keeper}}: {{ punten_keeper1 }} {{punten_keeper}}</h3>
+
+    <form method="POST" action="/start_spel">
+        <input type="hidden" name="gekozen_speler" value="{{ gekozen_speler }}">
+        <button type="submit" name="raak">Raak</button>
+        <button type="submit" name="paal">Paal</button>
+        <button type="submit" name="lat">Lat</button>
+        <button type="submit" name="mis">Mis</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Speler</th>
+            <th>Punten</th>
+        </tr>
+        {% for speler in spelers %}
+        <tr>
+            <td>{{ speler[0] }}</td> <!-- Naam van de speler -->
+            <td>{{ speler[1] }}</td> <!-- Punten van de speler -->
+        </tr>
+        {% endfor %}
+    </table>
+ 
+</body>
+</html>

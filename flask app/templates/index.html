@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Naam Toevoegen</title>
+</head>
+<body>
+    <h1>Voeg een Naam Toe</h1>
+    
+    <form method="POST" id="naam_form">
+        <label for="naam">Naam:</label>
+        <input type="text" name="naam" id="naam" required>
+        <button type="submit">Toevoegen</button>
+    </form>
+
+    <hr> <!-- Een horizontale lijn om de scheiding aan te geven -->
+
+    <h2>Keeper en Punten</h2>
+    
+    <button id="toevoegen_keeper">Voeg Keeper en Punten Toe</button>
+
+    <div id="keeper_invoer" style="display: none;">
+        <form method="POST">
+            <label for="keeper">Keeper:</label>
+            <input type="text" name="keeper" id="keeper" required>
+            <br>
+            <label for="punten">Punten:</label>
+            <input type="number" name="punten" id="punten" required>
+            <br>
+            <button type="submit">Opslaan</button>
+        </form>
+    </div>
+
+    <script>
+        // Functie om de keeper-invoer te tonen/verbergen en de naam-invoer te verbergen
+        document.getElementById("toevoegen_keeper").addEventListener("click", function() {
+            var keeperInvoer = document.getElementById("keeper_invoer");
+            var naamForm = document.getElementById("naam_form");
+            
+            if (keeperInvoer.style.display === "none") {
+                keeperInvoer.style.display = "block";
+                naamForm.style.display = "none"; // Verberg het naam formulier
+            } else {
+                keeperInvoer.style.display = "none";
+                naamForm.style.display = "block"; // Toon het naam formulier
+            }
+        });
+    </script>
+</body>
+</html>

@@ -84,7 +84,7 @@ def q3(lst):
     #Het derde kwartiel is de derde kwart van een boxplot. De derde helft zit boven de mediaan.
     # Eerst controleren we de mediaan door de gemaakte functie mediaan aan te roepen.    
     #Vervolgens controleren we of de getallen groter zijn dan de mediaan. 
-    mediaan = median(lst)
+    mediaan = median(l  )
     
     # We maken een nieuwe lijst als de getallen groter zijn dan de mediaan.
     nieuwe_lijst = [nummer for nummer in lst if nummer > mediaan]

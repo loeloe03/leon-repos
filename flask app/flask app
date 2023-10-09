@@ -1,0 +1,129 @@
+import sqlite3
+from flask import Flask, render_template, request, redirect, url_for
+
+app = Flask(__name__)
+
+# Stel de locatie van de SQLite-database in
+DATABASE = r'C:\sqlite\databases\test.db'
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        if 'naam' in request.form:
+            naam = request.form['naam']
+            
+            # Voeg de naam toe aan de tabel 'tabel1'
+            conn = sqlite3.connect(DATABASE)
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO tabel1 (naam) VALUES (?)", (naam,))
+            conn.commit()
+            conn.close()
+
+
+            
+        elif 'keeper' in request.form and 'punten' in request.form:
+            keeper = request.form['keeper']
+            punten = request.form['punten']
+
+            # Verwerk de invoer van de keeper en punten (bijvoorbeeld opslaan in de database)
+            conn = sqlite3.connect(DATABASE)
+            cursor = conn.cursor()
+            cursor.execute("UPDATE tabel1 SET punten = ?, keeper = 1 WHERE naam = ? AND punten IS NULL AND keeper IS NULL", (punten, keeper))
+            cursor.execute("UPDATE tabel1 SET punten = 50 WHERE keeper  IS NULL")
+            cursor.execute("""    UPDATE tabel1    SET volgorde = (        SELECT COUNT(*)        FROM tabel1 AS t2        WHERE t2.keeper = 1 OR (t2.keeper IS NULL AND t2.rowid < tabel1.rowid)    )    WHERE keeper IS NULL;""")
+            conn.commit()
+            conn.close()
+
+            # Na het opslaan, doorverwijzen naar een nieuwe pagina voor het weergeven van de speler die mag beginnen
+            return redirect(url_for('wie_mag_beginnen'))
+
+    return render_template('index.html')
+
+
+
+
+from flask import jsonify
+
+@app.route('/wie_mag_beginnen')
+def wie_mag_beginnen():
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT naam FROM tabel1 WHERE volgorde = 1")
+    result = cursor.fetchone()
+    cursor.execute("SELECT naam, punten FROM tabel1 WHERE keeper = 1")
+    result2 = cursor.fetchone()
+    naam_keeper = result2[0]
+    punten_keeper = result2[1]
+    aan_de_beurt = result[0]
+    conn.close()
+
+    return render_template('start.html', aan_de_beurt=aan_de_beurt, naam_keeper=naam_keeper, punten_keeper=punten_keeper)
+# Rest van je Flask-applicatie
+
+
+@app.route('/start_spel', methods=['GET', 'POST'])
+def start_spel():
+    
+
+    if request.method == 'POST':
+        #Start speler:
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT naam FROM tabel1 WHERE volgorde = 1")
+        result = cursor.fetchone()
+        aan_de_beurt1 = result[0]
+        conn.close()
+        # Verwerk de keuze van de speler (raak, paal of lat) en werk de punten bij in de database
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT naam, punten FROM tabel1 WHERE keeper = 1")
+        result3 = cursor.fetchone()
+        naam_keeper1 = result3[0]
+        punten_keeper1 = result3[1]
+        if 'raak' in request.form:
+            cursor.execute("UPDATE tabel1 SET punten = punten - 1 WHERE keeper = 1")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ( CASE WHEN volgorde = (SELECT MIN(volgorde) FROM tabel1) THEN (SELECT MAX(volgorde) FROM tabel1) ELSE volgorde - 1 END ); ")
+        elif 'paal' in request.form:
+            cursor.execute("UPDATE tabel1 SET punten = punten - 10 WHERE keeper = 1")
+        elif 'lat' in request.form:
+            cursor.execute("UPDATE tabel1 SET punten = punten - 5 WHERE keeper = 1")
+
+        elif 'mis' in request.form:
+            #schutter naar NULL in tabel volgorde
+            cursor.execute("UPDATE tabel1 SET keeper = NULL WHERE keeper = 1")
+            cursor.execute("UPDATE tabel1 SET keeper = 1 WHERE volgorde = 1")
+            cursor.execute("UPDATE tabel1 SET volgorde = NULL WHERE volgorde = 1")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ( SELECT COALESCE(MAX(volgorde), 0) + 1 FROM tabel1 WHERE volgorde IS NOT NULL ) WHERE keeper IS NULL AND volgorde IS NULL; ")
+            cursor.execute(" UPDATE tabel1 SET volgorde = volgorde - 1 WHERE volgorde IS NOT NULL; ")
+                       
+
+
+        # Controleren of de punten van de keeper negatief zijn geworden
+        cursor.execute("SELECT punten FROM tabel1 WHERE keeper = 1")
+        punten_keeper = cursor.fetchone()
+        
+
+        if punten_keeper[0] <= 0:
+            conn.commit()
+            return render_template('game_over.html')
+            
+        conn.commit()
+        conn.close()
+
+    # Haal de tussenstand op van alle spelers, gesorteerd van hoog naar laag
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT naam, punten FROM tabel1 ORDER BY punten DESC")
+    spelers = cursor.fetchall()
+    conn.close()
+
+    # Haal de huidige speler op die op positie [0] staat in spelers1
+  
+    
+    return render_template('start.html', spelers=spelers, naam_keeper1=naam_keeper1, punten_keeper1=punten_keeper1, aan_de_beurt1=aan_de_beurt1)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+
