@@ -103,53 +103,46 @@ def var(lst):
     # Het gemiddelde van de lijst definiëren.
     gemiddelde = mean(lst)
 
-    # We maken een lege lijst aan
+    # Lege lijst creëren
     afwijkingen = []
     
-    # We pakken alle getallen uit de lijst
+    # Alle getallen uit de lijst selecteren
     for nummer in lst:
-        # We pakken het getal en trekken daar het gemiddelde vanaf en dan pakken we het kwadraat van dat getal
-        # En dat voegen we toe aan de lijst met afwijkingen
+        # We slecteren het getal en trekken vervolgens het gemiddelde daar vanaf. Daarna berekenen we het kwadraat van dat getal
+        # Dit getal voegen we toe aan de lijst met afwijkingen
         afwijkingen.append((nummer - gemiddelde) ** 2)
 
-    # Hier berekenen we de variantie
-    # Door de afwijkingen bij elkaar op te tellen en te delen door het aantal getallen
-    variantie = sum(afwijkingen) / lengte
+    # De variantie kunnen we weer bereken door de gemiddelde functie aan te roepen. 
+    variantie = mean(afwijkingen)
     return variantie
 
 
 def std(lst):
-    # Een standaardafwijking is de wortel van de variantie
-
-    # Hier kijken we wat de standaardafwijking is
-    
-    # Dat doen we door de variantie te pakken en die te wortelen
+    # De standaardafwijking berekenen we door de wortel te nemen van de variantie.
+    #Dit doen we door de functie variantie aan te roepen
     variantie = var(lst)
     
-    # We pakken de wortel door de variantie te machtsverheffen met 0.5 
+    # De wortel berekenen we door de variantie te machtsverheffen met 0.5 
     return variantie ** 0.5
 
 
 def freq(lst):
-    # Een frequentie is hoe vaak een getal voorkomt
-    
-    # Hier kijken we wat de frequentie is
-    # Dat doen we door de getallen bij elkaar op te tellen en te delen door het aantal getallen
-    
-    # Maak een lege dictionary aan
-    freqs = {}
 
-    # Loop over alle getallen in de lijst
+
+    # Eerst maken we een lege dictonary aan.
+    frequentie = {}
+
+    # We loopen over alle getallen in de opgegeven lijst heen.
     for num in lst:
         
-        # Kijk of het getal al in de dictionary zit
-        if num in freqs:
-            # Als het getal al in de lijst zit dan voegen we er 1 bij op
-            freqs[num] += 1
+        # Hier controleren we of het getal al aanwezig is in de dictinary.
+        if num in frequentie:
+            # Als het getal al in de lijst aanwezig is tellen we er 1 bij op.
+            frequentie[num] += 1
         else:
-            # Als het getal nog niet in de lijst zit dan voegen we het toe
-            freqs[num] = 1
-    return freqs
+            # Als het getal nog niet aanwezig is in de lijst voegen we deze hieraan toe.
+            frequentie[num] = 1
+    return frequentie
 
 
 def modes(lst):
