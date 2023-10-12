@@ -66,27 +66,60 @@ def start_spel():
     
 
     if request.method == 'POST':
-        #Start speler:
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
-        cursor.execute("SELECT naam FROM tabel1 WHERE volgorde = 1")
-        result = cursor.fetchone()
-        aan_de_beurt1 = result[0]
-        conn.close()
         # Verwerk de keuze van de speler (raak, paal of lat) en werk de punten bij in de database
         conn = sqlite3.connect(DATABASE)
         cursor = conn.cursor()
-        cursor.execute("SELECT naam, punten FROM tabel1 WHERE keeper = 1")
-        result3 = cursor.fetchone()
-        naam_keeper1 = result3[0]
-        punten_keeper1 = result3[1]
+        
         if 'raak' in request.form:
+            cursor.execute("SELECT MAX(volgorde) AS hoogste_volgorde FROM tabel1; ")
+            result4 = cursor.fetchone()
+            hoogste_punten = result4[0]
+            cursor.execute("UPDATE tabel1 SET volgorde = volgorde - 1 WHERE keeper IS NULL;")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ? WHERE volgorde = (SELECT MIN(volgorde) FROM tabel1); ", (hoogste_punten,))
             cursor.execute("UPDATE tabel1 SET punten = punten - 1 WHERE keeper = 1")
-            cursor.execute(" UPDATE tabel1 SET volgorde = ( CASE WHEN volgorde = (SELECT MIN(volgorde) FROM tabel1) THEN (SELECT MAX(volgorde) FROM tabel1) ELSE volgorde - 1 END ); ")
         elif 'paal' in request.form:
-            cursor.execute("UPDATE tabel1 SET punten = punten - 10 WHERE keeper = 1")
-        elif 'lat' in request.form:
+            cursor.execute("SELECT MAX(volgorde) AS hoogste_volgorde FROM tabel1; ")
+            result4 = cursor.fetchone()
+            hoogste_punten = result4[0]
+            cursor.execute("UPDATE tabel1 SET volgorde = volgorde - 1 WHERE keeper IS NULL;")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ? WHERE volgorde = (SELECT MIN(volgorde) FROM tabel1); ", (hoogste_punten,))
             cursor.execute("UPDATE tabel1 SET punten = punten - 5 WHERE keeper = 1")
+        elif 'lat' in request.form:
+            cursor.execute("SELECT MAX(volgorde) AS hoogste_volgorde FROM tabel1; ")
+            result4 = cursor.fetchone()
+            hoogste_punten = result4[0]
+            cursor.execute("UPDATE tabel1 SET volgorde = volgorde - 1 WHERE keeper IS NULL;")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ? WHERE volgorde = (SELECT MIN(volgorde) FROM tabel1); ", (hoogste_punten,))
+            cursor.execute("UPDATE tabel1 SET punten = punten - 10 WHERE keeper = 1")
+
+        elif 'puntje_kruising' in request.form:
+            cursor.execute("SELECT MAX(volgorde) AS hoogste_volgorde FROM tabel1; ")
+            result4 = cursor.fetchone()
+            hoogste_punten = result4[0]
+            cursor.execute("UPDATE tabel1 SET volgorde = volgorde - 1 WHERE keeper IS NULL;")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ? WHERE volgorde = (SELECT MIN(volgorde) FROM tabel1); ", (hoogste_punten,))
+            cursor.execute("UPDATE tabel1 SET punten = punten - 15 WHERE keeper = 1")
+
+        elif 'winkelhaak' in request.form:
+            cursor.execute("SELECT MAX(volgorde) AS hoogste_volgorde FROM tabel1; ")
+            result4 = cursor.fetchone()
+            hoogste_punten = result4[0]
+            cursor.execute("UPDATE tabel1 SET volgorde = volgorde - 1 WHERE keeper IS NULL;")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ? WHERE volgorde = (SELECT MIN(volgorde) FROM tabel1); ", (hoogste_punten,))
+            cursor.execute("UPDATE tabel1 SET punten = punten - 25 WHERE keeper = 1")
+
+        elif 'door_winkelhaak' in request.form:
+            cursor.execute("UPDATE tabel1 SET punten = 0 WHERE keeper = 1")
+
+        elif 'mis_over_hek' in request.form:
+            #schutter naar NULL in tabel volgorde
+            cursor.execute("UPDATE tabel1 SET keeper = NULL WHERE keeper = 1")
+            cursor.execute("UPDATE tabel1 SET keeper = 1 WHERE volgorde = 1")
+            cursor.execute("UPDATE tabel1 SET volgorde = NULL WHERE volgorde = 1")
+            cursor.execute(" UPDATE tabel1 SET volgorde = ( SELECT COALESCE(MAX(volgorde), 0) + 1 FROM tabel1 WHERE volgorde IS NOT NULL ) WHERE keeper IS NULL AND volgorde IS NULL; ")
+            cursor.execute(" UPDATE tabel1 SET volgorde = volgorde - 1 WHERE volgorde IS NOT NULL; ")
+            cursor.execute("UPDATE tabel1 SET punten = punten - 10 WHERE keeper = 1")
+
 
         elif 'mis' in request.form:
             #schutter naar NULL in tabel volgorde
@@ -96,17 +129,22 @@ def start_spel():
             cursor.execute(" UPDATE tabel1 SET volgorde = ( SELECT COALESCE(MAX(volgorde), 0) + 1 FROM tabel1 WHERE volgorde IS NOT NULL ) WHERE keeper IS NULL AND volgorde IS NULL; ")
             cursor.execute(" UPDATE tabel1 SET volgorde = volgorde - 1 WHERE volgorde IS NOT NULL; ")
                        
-
+        elif 'sloot' in request.form:
+            cursor.execute("SELECT naam FROM tabel1 WHERE volgorde = 1")
+            result7 = cursor.fetchone()
+            aan_de_beurt2 = result7[0] 
+            cursor.execute("UPDATE tabel1 SET punten = 0 WHERE naam = ?", (aan_de_beurt2,))
 
         # Controleren of de punten van de keeper negatief zijn geworden
-        cursor.execute("SELECT punten FROM tabel1 WHERE keeper = 1")
-        punten_keeper = cursor.fetchone()
-        
-
-        if punten_keeper[0] <= 0:
+        cursor.execute("SELECT naam, punten FROM tabel1 WHERE keeper = 1")
+        result6 = cursor.fetchone()
+        naampje_keeper = result6[0]
+        if result6[1] <= 0:
             conn.commit()
-            return render_template('game_over.html')
-            
+            return render_template('game_over.html', naampje_keeper=naampje_keeper)
+        
+         
+
         conn.commit()
         conn.close()
 
@@ -119,8 +157,20 @@ def start_spel():
 
     # Haal de huidige speler op die op positie [0] staat in spelers1
   
-    
-    return render_template('start.html', spelers=spelers, naam_keeper1=naam_keeper1, punten_keeper1=punten_keeper1, aan_de_beurt1=aan_de_beurt1)
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT naam, punten FROM tabel1 WHERE keeper = 1")
+    result = cursor.fetchone()
+    cursor.execute("SELECT naam FROM tabel1 WHERE volgorde = 1")
+    result5 = cursor.fetchone()
+    naam_keeper1 = result[0]
+    punten_keeper1 = result[1]
+    aan_de_beurt1 = result5[0]
+    conn.commit()
+    conn.close()
+
+
+    return render_template('start.html', spelers=spelers, naam_keeper1=naam_keeper1, punten_keeper1=punten_keeper1, aan_de_beurt1=aan_de_beurt1) 
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -2,19 +2,27 @@
 <html>
 <head>
     <title>Start Spel</title>
+    <style>
+        
+    </style>
 </head>
 <body>
-    <h1>De speler die mag schieten is: {{ aan_de_beurt }} {{aan_de_beurt1}}
+    <h1>De speler die mag schieten is: {{ aan_de_beurt }} {{ aan_de_beurt1 }}
     </h1>
 
-    <h3>Resterende punten van {{naam_keeper1}} {{naam_keeper}}: {{ punten_keeper1 }} {{punten_keeper}}</h3>
+    <h3>Resterende punten van {{ naam_keeper1 }} {{ naam_keeper }}: {{ punten_keeper1 }} {{ punten_keeper }}</h3>
 
     <form method="POST" action="/start_spel">
         <input type="hidden" name="gekozen_speler" value="{{ gekozen_speler }}">
-        <button type="submit" name="raak">Raak</button>
-        <button type="submit" name="paal">Paal</button>
-        <button type="submit" name="lat">Lat</button>
-        <button type="submit" name="mis">Mis</button>
+        <button type="submit" name="raak" class="glow-on-hover">Raak</button>
+        <button type="submit" name="mis" class="glow-on-hover">Mis</button>
+        <button type="submit" name="paal" class="glow-on-hover">Paal</button>
+        <button type="submit" name="lat" class="glow-on-hover">Lat</button>
+        <button type="submit" name="puntje_kruising" class="glow-on-hover">Puntje Kruising</button>
+        <button type="submit" name="winkelhaak" class="glow-on-hover">Winkelhaak</button>
+        <button type="submit" name="door_winkelhaak" class="glow-on-hover">Door Winkelhaak</button>
+        <button type="submit" name="mis_over_hek" class="glow-on-hover">Mis over Hek</button>
+        <button type="submit" name="sloot" class="glow-on-hover">Sloot is dood</button>
     </form>
 
     <table>
@@ -29,6 +37,5 @@
         </tr>
         {% endfor %}
     </table>
- 
 </body>
 </html>

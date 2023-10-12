@@ -1,13 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Naam Toevoegen</title>
+    <title>vijftigen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            margin: 0;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button#toevoegen_keeper {
+            background-color: #007bff;
+        }
+
+        hr {
+            border: 1px solid #ccc;
+            margin: 20px;
+        }
+
+        #keeper_invoer {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>Voeg een Naam Toe</h1>
+    <h1>50tigen</h1>
     
     <form method="POST" id="naam_form">
-        <label for="naam">Naam:</label>
+        <label for="naam">Voeg naam van de spelers toe:</label>
         <input type="text" name="naam" id="naam" required>
         <button type="submit">Toevoegen</button>
     </form>
