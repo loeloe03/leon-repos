@@ -3,58 +3,97 @@
 <head>
     <title>Start Spel</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
+/* Algemene stijl voor de body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
 
-        h1 {
-            color: #0074b2;
-        }
+/* Stijl voor de koppen */
+h1 {
+    color: #333;
+    text-align: center;
+}
 
-        h3 {
-            color: #333;
-        }
+h3 {
+    color: #666;
+    text-align: center;
+}
 
-        form {
-            margin-top: 20px;
-        }
+/* Stijl voor de knoppen */
+button.glow-on-hover {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
 
-        button.glow-on-hover {
-            background-color: #0074b2;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
+button.glow-on-hover:hover {
+    background-color: #2980b9;
+}
 
-        button.glow-on-hover:hover {
-            background: #00568e;
-        }
+/* Stijl voor de tabel */
+table {
+    margin: 20px auto;
+    border-collapse: collapse;
+    width: 80%;
+}
 
-        table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
+table, th, td {
+    border: 1px solid #ccc;
+}
 
-        table, th, td {
-            border: 1px solid #333;
-        }
+th, td {
+    padding: 10px;
+    text-align: left;
+}
 
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
+th {
+    background-color: #3498db;
+    color: #fff;
+}
 
-        th {
-            background-color: #0074b2;
-            color: #fff;
-        }
+/* Stijl voor de knop om bijzondere combo-knoppen in- en uit te klappen */
+#toggleCustomButtons {
+    display: block;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+#toggleCustomButtons:hover {
+    background-color: #2980b9;
+}
+
+#customButtons {
+    display: none;
+    padding: 10px;
+}
+
+/* Stijl voor de bijzondere combo-knoppen */
+#customButtons button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
+
+#customButtons button:hover {
+    background-color: #c0392b;
+}
     </style>
 </head>
 <body>
@@ -72,7 +111,12 @@
         <button type="submit" name="door_winkelhaak" class="glow-on-hover">Door Winkelhaak</button>
         <button type="submit" name="mis_over_hek" class="glow-on-hover">Mis over Hek</button>
         <button type="submit" name="sloot" class="glow-on-hover">Sloot is dood</button>
-    </form>
+        <button type="submit" name="-1" class="glow-on-hover">-1</button>
+        <button type="submit" name="-5" class="glow-on-hover">-5</button>
+        <button type="submit" name="-10" class="glow-on-hover">-10</button>
+
+     
+
 
     <table>
         <tr>
@@ -86,5 +130,7 @@
         </tr>
         {% endfor %}
     </table>
+
+    
 </body>
 </html>

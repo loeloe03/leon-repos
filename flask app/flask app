@@ -134,6 +134,19 @@ def start_spel():
             result7 = cursor.fetchone()
             aan_de_beurt2 = result7[0] 
             cursor.execute("UPDATE tabel1 SET punten = 0 WHERE naam = ?", (aan_de_beurt2,))
+        
+        elif '-1' in request.form:
+            cursor.execute("UPDATE tabel1 SET punten = punten - 1 WHERE keeper = 1")
+
+        elif '-5' in request.form:
+            cursor.execute("UPDATE tabel1 SET punten = punten - 5 WHERE keeper = 1")
+
+        elif '-10' in request.form:
+            cursor.execute("UPDATE tabel1 SET punten = punten - 10 WHERE keeper = 1")
+
+        
+
+
 
         # Controleren of de punten van de keeper negatief zijn geworden
         cursor.execute("SELECT naam, punten FROM tabel1 WHERE keeper = 1")
