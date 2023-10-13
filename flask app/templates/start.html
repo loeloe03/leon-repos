@@ -3,13 +3,62 @@
 <head>
     <title>Start Spel</title>
     <style>
-        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #0074b2;
+        }
+
+        h3 {
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        button.glow-on-hover {
+            background-color: #0074b2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button.glow-on-hover:hover {
+            background: #00568e;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #333;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0074b2;
+            color: #fff;
+        }
     </style>
 </head>
 <body>
-    <h1>De speler die mag schieten is: {{ aan_de_beurt }} {{ aan_de_beurt1 }}
-    </h1>
-
+    <h1>De speler die mag schieten is: {{ aan_de_beurt }} {{ aan_de_beurt1 }}</h1>
     <h3>Resterende punten van {{ naam_keeper1 }} {{ naam_keeper }}: {{ punten_keeper1 }} {{ punten_keeper }}</h3>
 
     <form method="POST" action="/start_spel">
