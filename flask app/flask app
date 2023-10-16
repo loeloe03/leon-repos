@@ -40,10 +40,6 @@ def index():
     return render_template('index.html')
 
 
-
-
-from flask import jsonify
-
 @app.route('/wie_mag_beginnen')
 def wie_mag_beginnen():
     conn = sqlite3.connect(DATABASE)
@@ -154,8 +150,26 @@ def start_spel():
         naampje_keeper = result6[0]
         if result6[1] <= 0:
             conn.commit()
+
+            try:
+                # Connect to the SQLite database
+                conn = sqlite3.connect(DATABASE)
+                cursor = conn.cursor()
+
+                # Create the game1 table with the same structure as tabel1
+                cursor.execute("CREATE TABLE IF NOT EXISTS game1 AS SELECT * FROM tabel1")
+                cursor.execute("DELETE FROM tabel1")
+
+                # Commit the changes and close the database connection
+                conn.commit()
+                conn.close()
+
+                print("Table 'game1' created and data copied successfully from 'tabel1'.")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+
             return render_template('game_over.html', naampje_keeper=naampje_keeper)
-        
+
          
 
         conn.commit()
@@ -182,11 +196,14 @@ def start_spel():
     conn.commit()
     conn.close()
 
-
     return render_template('start.html', spelers=spelers, naam_keeper1=naam_keeper1, punten_keeper1=punten_keeper1, aan_de_beurt1=aan_de_beurt1) 
 
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='192.168.100.78', port=5000, debug=True, threaded=False)
+
+
 
 
 
