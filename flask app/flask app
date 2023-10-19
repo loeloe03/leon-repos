@@ -56,6 +56,42 @@ def wie_mag_beginnen():
     return render_template('start.html', aan_de_beurt=aan_de_beurt, naam_keeper=naam_keeper, punten_keeper=punten_keeper)
 # Rest van je Flask-applicatie
 
+def create_new_table():
+    # Get a list of all table names in the database
+    conn = sqlite3.connect(DATABASE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    table_names = cursor.fetchall()
+  
+    # Extract the numbers from table names and find the highest number
+    max_number = 0
+
+    for table_name in table_names:
+        table_name = table_name[0]
+        if table_name.startswith('game'):
+            try:
+                number = int(table_name.replace('game', ''))
+                if number > max_number:
+                    max_number = number
+            except ValueError:
+                pass
+            
+
+    # Increment the highest number to create the new table name
+    new_table_name = f'game{max_number + 1}'
+
+    # Create the new table with the incremented name
+    
+    cursor.execute(f"CREATE TABLE IF NOT EXISTS {new_table_name} AS SELECT * FROM tabel1;")
+
+    
+
+
+    cursor.execute("DELETE FROM tabel1")
+    conn.commit()
+    return new_table_name
+
+
 
 @app.route('/start_spel', methods=['GET', 'POST'])
 def start_spel():
@@ -140,47 +176,32 @@ def start_spel():
         elif '-10' in request.form:
             cursor.execute("UPDATE tabel1 SET punten = punten - 10 WHERE keeper = 1")
 
-        
+        conn.commit()
 
+        conn = sqlite3.connect(DATABASE)
+        cursor = conn.cursor()
+        cursor.execute("SELECT naam, punten FROM tabel1 ORDER BY punten DESC")
+        spelers = cursor.fetchall()
 
 
         # Controleren of de punten van de keeper negatief zijn geworden
         cursor.execute("SELECT naam, punten FROM tabel1 WHERE keeper = 1")
         result6 = cursor.fetchone()
         naampje_keeper = result6[0]
+
         if result6[1] <= 0:
+            cursor.execute("CREATE TABLE IF NOT EXISTS game1 AS SELECT * FROM tabel1;")    
             conn.commit()
+            create_new_table()
 
-            try:
-                # Connect to the SQLite database
-                conn = sqlite3.connect(DATABASE)
-                cursor = conn.cursor()
-
-                # Create the game1 table with the same structure as tabel1
-                cursor.execute("CREATE TABLE IF NOT EXISTS game1 AS SELECT * FROM tabel1")
-                cursor.execute("DELETE FROM tabel1")
-
-                # Commit the changes and close the database connection
-                conn.commit()
-                conn.close()
-
-                print("Table 'game1' created and data copied successfully from 'tabel1'.")
-            except Exception as e:
-                print(f"An error occurred: {e}")
-
-            return render_template('game_over.html', naampje_keeper=naampje_keeper)
+            return render_template('game_over.html', naampje_keeper=naampje_keeper, spelers=spelers)
 
          
 
-        conn.commit()
         conn.close()
 
     # Haal de tussenstand op van alle spelers, gesorteerd van hoog naar laag
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
-    cursor.execute("SELECT naam, punten FROM tabel1 ORDER BY punten DESC")
-    spelers = cursor.fetchall()
-    conn.close()
+    
 
     # Haal de huidige speler op die op positie [0] staat in spelers1
   
@@ -200,8 +221,13 @@ def start_spel():
 
 
 
+
+
+# Rest van je Flask-applicatie
+
 if __name__ == '__main__':
-    app.run(host='192.168.100.78', port=5000, debug=True, threaded=False)
+    app.run(host='127.0.0.1', port=5000, debug=True, threaded=False)
+
 
 
 

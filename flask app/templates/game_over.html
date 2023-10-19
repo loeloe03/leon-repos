@@ -2,12 +2,99 @@
 <html>
 <head>
     <title>GAME OVER!</title>
+
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #ff0000;
+        }
+
+        h2 {
+            margin: 20px 0;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        button {
+            background-color: #008CBA;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h3 {
+            margin-top: 20px; /* Add margin to push it below h2 and center it */
+        }
+
+        table {
+            width: 50%;
+            float: right;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #008CBA;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            margin-top: 20px; /* Add margin to push the form below the table */
+        }
+    </style>
 </head>
 <body>
-    <h1> {{naampje_keeper}} is afgeschoten krom staan!!</h1>
-    <h2>
-        <a href="https://ibb.co/qM47fYG"><img src="https://i.ibb.co/kgr5f2n/dood.jpg" alt="dood" border="0"></a>
+    <h1>{{naampje_keeper}} is afgeschoten krom staan!!</h1>
 
-    </h2>
+    <div class="container">
+        <h2>
+            <a href="https://ibb.co/qM47fYG"><img src="https://i.ibb.co/kgr5f2n/dood.jpg" alt="dood" border="0"></a>
+        </h2>
+        <h3>uitslag</h3>
+
+        <table>
+            <tr>
+                <th>Speler</th>
+                <th>Punten</th>
+            </tr>
+            {% for speler in spelers %}
+            <tr>
+                <td>{{ speler[0] }}</td>
+                <td>{{ speler[1] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!-- Voeg een formulier toe met een knopelement dat naar '/nieuw_potje' verwijst -->
+    <form action="/" method="get">
+        <button type="submit">Terug naar Game</button>
+    </form>
 </body>
 </html>
