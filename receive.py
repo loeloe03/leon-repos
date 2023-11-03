@@ -45,7 +45,7 @@ def get_data():
 
 def extract_time(row):
     timestamp = str(row[4])  # Ensure the timestamp is converted to a string
-    time = timestamp[-8:-3]  # Get the last 5 characters (hh:mm)
+    time = timestamp[-8:-3]  # Get the last 5 characters (hh:mm)1
     return time
 
 # Function to generate the graph
