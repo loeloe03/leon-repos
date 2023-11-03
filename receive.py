@@ -36,51 +36,51 @@ def get_data():
     c = conn.cursor()
     c.execute("SELECT MAX(seq) AS hoogste_getal FROM data")
     highest_value = c.fetchone()[0]  # Fetching the highest value from the result
-    start = highest_value - 10  # Subtracting 10 from the highest value
+    start = highest_value - 15  # Subtracting 10 from the highest value
     query = "SELECT * FROM data WHERE seq >= ? ORDER BY seq ASC"
     c.execute(query, (start,))
     data = c.fetchall()
     conn.close()
     return data
 
+def extract_time(row):
+    timestamp = str(row[4])  # Ensure the timestamp is converted to a string
+    time = timestamp[-8:-3]  # Get the last 5 characters (hh:mm)
+    return time
+
 # Function to generate the graph
 def generate_graph():
     data = get_data()
-    x = [row[4] for row in data]  # Assuming the first column represents time
-    cpu = [row[1] for row in data]  # Assuming the second column represents CPU
-    memory = [row[2] for row in data]  # Assuming the third column represents memory
-    disk = [row[3] for row in data]  # Assuming the fourth column represents disk
+    time = [extract_time(row) for row in data][::-1]  # Reversing x-axis values for correct order
+    seq = [row[0] for row in data][::-1]  # Assuming the first column represents 'seq'
+    cpu = [row[1] for row in data][::-1]  # Assuming the second column represents CPU
+    memory = [row[2] for row in data][::-1]  # Assuming the third column represents memory
+    disk = [row[3] for row in data][::-1]  # Assuming the fourth column represents disk
     fqdn = data[0][5]  # Fetch the FQDN from the first record only
-
-
 
     y_min = 0
     y_max = max(100, max(max(cpu), max(memory), max(disk)))
 
     plt.figure(figsize=(8, 6))
-    plt.plot(x, cpu, 'r', label='CPU')
-    plt.plot(x, memory, 'b', label='Memory')
-    plt.plot(x, disk, 'orange', label='Disk')
-
-    plt.xlabel('Time')
+    plt.plot(seq, cpu, 'r', label='CPU')
+    plt.plot(seq, memory, 'b', label='Memory')
+    plt.plot(seq, disk, 'orange', label='Disk')
+    
+    plt.xlabel('Time')  # Set x-axis label to Time
     plt.ylabel('Percentage')
     plt.legend()
     
-    # Set y-axis limits
-    plt.ylim(y_min, y_max)
-
-
-    # Set the FQDN as the title of the plot
     plt.title(f'FQDN: {fqdn}', fontsize=12, weight='bold')
+    plt.ylim(y_min, y_max)
+    
+    plt.xticks(seq, time, rotation='vertical')  # Set x-axis ticks to display 'time' on every 'seq'
 
-    # Save the plot as a base64 string to display on the Flask page
     img = io.BytesIO()
     plt.savefig(img, format='png')
     img.seek(0)
     graph_url = base64.b64encode(img.getvalue()).decode()
     plt.close()
     return f'data:image/png;base64,{graph_url}'
-
 
 
 
