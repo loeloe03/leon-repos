@@ -5,11 +5,14 @@
 </head>
 <body>
     <h1>Data Received</h1>
+    <p>pc naam: {{ name}}</p>
     <p>CPU percentage: {{ cpu}}</p>
     <p>memory usage: {{ memory}}</p>
     <p>disk usage: {{ disk}}</p>
-    <p>pc naam: {{ name}}</p>
     <p>time: {{ time }}</p>
+
+    <img src="{{ graph }}">
+
 
 
     <script>
